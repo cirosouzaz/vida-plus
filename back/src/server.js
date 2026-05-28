@@ -9,7 +9,10 @@ dataSource.initialize()
     console.log('Data Source initialized');
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
+      console.log('http://localhost:3001/api/docs');
+    
     });
+    
   })
   .catch((err) => {
     console.error('Error during Data Source initialization', err);

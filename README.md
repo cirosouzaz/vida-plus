@@ -129,13 +129,6 @@ cd back
 npm install
 ```
 
-3. Copie o arquivo de ambiente:
-
-```bash
-cp .env.example .env
-```
-
-4. Ajuste `DATABASE_URL` para seu banco PostgreSQL (Neon DB) e `JWT_SECRET`.
 
 5. Inicie em modo de desenvolvimento:
 
@@ -161,12 +154,6 @@ cd vidaplus-front
 
 ```bash
 npm install
-```
-
-3. Crie o arquivo de ambiente local:
-
-```bash
-cp .env.example .env
 ```
 
 4. Inicie o frontend:
