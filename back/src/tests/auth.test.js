@@ -1,5 +1,6 @@
 const request = require('supertest');
 const app = require('../app');
+const dataSource = require('../database/data-source');
 
 describe('Auth', () => {
   if (!process.env.DATABASE_URL) {
@@ -8,6 +9,14 @@ describe('Auth', () => {
     });
     return;
   }
+
+  beforeAll(async () => {
+    if (!dataSource.isInitialized) await dataSource.initialize();
+  });
+
+  afterAll(async () => {
+    if (dataSource.isInitialized) await dataSource.destroy();
+  });
 
   const email = `test+${Date.now()}@example.com`;
   it('should register and login', async () => {

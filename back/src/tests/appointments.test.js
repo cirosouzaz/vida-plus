@@ -1,5 +1,6 @@
 const request = require('supertest');
 const app = require('../app');
+const dataSource = require('../database/data-source');
 
 describe('Appointments CRUD', () => {
   if (!process.env.DATABASE_URL) {
@@ -10,13 +11,18 @@ describe('Appointments CRUD', () => {
   }
 
   let token;
+
   beforeAll(async () => {
+    if (!dataSource.isInitialized) await dataSource.initialize();
     const email = `appt+${Date.now()}@example.com`;
     await request(app).post('/api/auth/register').send({ name: 'A', email, password: 'pass' });
     const login = await request(app).post('/api/auth/login').send({ email, password: 'pass' });
     token = login.body.token;
   });
 
+  afterAll(async () => {
+    if (dataSource.isInitialized) await dataSource.destroy();
+  });
   it('create list update delete', async () => {
     const create = await request(app).post('/api/appointments').set('Authorization', `Bearer ${token}`).send({ doctor: 'Dr X', specialty: 'Cardio', date: new Date().toISOString(), notes: 'Notes' });
     expect(create.status).toBe(201);
