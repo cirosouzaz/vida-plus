@@ -1,0 +1,32 @@
+{
+  "name": "vidaplus-back",
+  "version": "1.0.0",
+  "description": "VidaPlus backend - simple health organizer",
+  "license": "MIT",
+  "author": "",
+  "type": "commonjs",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": "jest --runInBand"
+  },
+  "dependencies": {
+    "axios": "^1.5.0",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "debug": "^4.3.4",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "pg": "^8.11.0",
+    "reflect-metadata": "^0.1.13",
+    "swagger-ui-express": "^4.6.3",
+    "typeorm": "^0.3.17"
+  },
+  "devDependencies": {
+    "jest": "^29.6.1",
+    "nodemon": "^2.0.22",
+    "supertest": "^6.3.4"
+  }
+}
