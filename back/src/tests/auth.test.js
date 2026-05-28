@@ -19,11 +19,50 @@ describe('Auth', () => {
   });
 
   const email = `test+${Date.now()}@example.com`;
-  it('should register and login', async () => {
-    const registerRes = await request(app).post('/api/auth/register').send({ name: 'Test', email, password: 'pass123' });
-    expect(registerRes.status).toBe(201);
-    const loginRes = await request(app).post('/api/auth/login').send({ email, password: 'pass123' });
-    expect(loginRes.status).toBe(200);
-    expect(loginRes.body.token).toBeDefined();
+  const password = 'pass123';
+
+  it('registers a new user', async () => {
+    const response = await request(app)
+      .post('/api/auth/register')
+      .send({ name: 'Test', email, password });
+
+    expect(response.status).toBe(201);
+    expect(response.body).toMatchObject({ id: expect.any(String), name: 'Test', email });
+  });
+
+  it('prevents duplicate registration', async () => {
+    const response = await request(app)
+      .post('/api/auth/register')
+      .send({ name: 'Test', email, password });
+
+    expect(response.status).toBe(400);
+    expect(response.body.message).toMatch(/Email already in use/i);
+  });
+
+  it('logs in with valid credentials', async () => {
+    const response = await request(app)
+      .post('/api/auth/login')
+      .send({ email, password });
+
+    expect(response.status).toBe(200);
+    expect(response.body.token).toBeDefined();
+  });
+
+  it('rejects login with invalid password', async () => {
+    const response = await request(app)
+      .post('/api/auth/login')
+      .send({ email, password: 'wrongpass' });
+
+    expect(response.status).toBe(401);
+    expect(response.body.message).toMatch(/invalid credentials/i);
+  });
+
+  it('rejects login for non-existing user', async () => {
+    const response = await request(app)
+      .post('/api/auth/login')
+      .send({ email: `missing+${Date.now()}@example.com`, password });
+
+    expect(response.status).toBe(401);
+    expect(response.body.message).toMatch(/invalid credentials/i);
   });
 });
